@@ -1,0 +1,17 @@
+-----------------SCRIPT made by @Pasgamj0 (on roblox) ----------------
+----------------Server Script: game.ServerScriptService-------------
+
+local Players = game:GetService("Players")
+local BadgeService = game:GetService("BadgeService")
+local Badge_Id  = 4006527484705531
+
+Players.PlayerAdded:Connect(function(player)
+	local success, error = pcall(function()
+		if not BadgeService:UserHasBadgeAsync(player.UserId, Badge_Id) then -- if player don't have badge (we use it to avoid messages from roblox like: we already give out badge to player)
+			print("Player don't have Badge!")
+			BadgeService:AwardBadge(player.UserId, Badge_Id) -- give badge
+		end
+	end)
+end)
+
+-----------END---------------
