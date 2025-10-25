@@ -1,0 +1,36 @@
+-----------SCRIPT made by @Pasgamj0 (on roblox)
+-----------Server Script: game.ServerScriptService
+
+local Module = require(game.ReplicatedStorage.RainModule) -- i use module to do weather
+
+while true do
+	local timee = os.date(`*t`) -- returns table of time
+	--if script.WeatherEnabled.Value == true then -- optional: i use it to disable weather, you can remove
+	if timee.min == 30 and timee.sec == 0 then -- every time its 30 min
+		Module.ActivateRain() -- action
+	elseif timee.min == 45 and timee.sec == 0 then -- every time its 45 min
+		local currentTime = os.time()
+		local timeData = os.date("*t", currentTime)
+		local seed = math.floor(currentTime / 3600) -- helps from any error because of seed limits
+		local rng = Random.new(seed) -- we use Random.new() + seed to make it global (its so easy right)
+		local randomValue = rng:NextInteger(1, 3) -- 1, 3 means there is 3 actions to happen
+		if randomValue == 1 then -- if 1 selected
+			Module:MeteorShower()
+		elseif randomValue == 2 then -- if 2
+				Module:Wind()
+			elseif randomValue == 3 then -- if 3, you can make more
+				Module:Snowfall()
+		end
+
+		task.wait(1)
+		elseif timee.min == 0 or timee.min == 00 and timee.sec == 0 then -- if its 0 min (after 59), every hour
+			Module:Halloween() -- action
+		end
+	--elseif script.WeatherEnabled.NextTimeEnable.Value == true then
+		--script.WeatherEnabled.Value = true
+	
+	--end
+	wait(0.95) -- if we dont use wait in while true do loop: action will run multiple times + game will crash
+end
+
+----------------END----------------
