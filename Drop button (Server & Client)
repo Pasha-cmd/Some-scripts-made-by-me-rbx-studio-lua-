@@ -1,0 +1,55 @@
+------------ MADE BY @PASGAMJ0 (ON ROBLOX)-----------------
+-------------SERVER SCRIPT: game.ServerScriptService----------------
+
+
+local Players = game:GetService("Players")
+local Event = game.ReplicatedStorage.REMOTES.IsPlayerMobileFunction
+
+Players.PlayerAdded:Connect(function(player)
+	local gui = player:WaitForChild(`PlayerGui`).UseGearGui.DropItemButton --path to BUTTON (better to use waitforchild because playergui can not load so fast)
+	player.CharacterAdded:Connect(function(character)
+		character.ChildAdded:Connect(function(child) -- player equips tool / item
+			if child:IsA(`Tool`) and child.CanBeDropped == true then -- check if tool can be dropped
+				local data = Event:InvokeClient(player) -- invokes client and gets data
+				if data then -- data - [true = player is on phone/tablet. false = player is pc or other device]
+				if data == true then -- player is mobile
+					gui.Visible = true
+				end end
+			end
+			
+		end)
+		
+		character.ChildRemoved:Connect(function(child) -- player unequips tool / item
+			if child:IsA(`Tool`) then
+			gui.Visible = false end
+		end)		
+	end)
+end)
+
+-----------------END---------------
+
+-----------------CLIENT SCRIPT: parent better to be drop button
+
+local eee = game.ReplicatedStorage.REMOTES:WaitForChild(`IsPlayerMobileFunction`, 432423) --[[
+CAUTION: object must be "RemoteFunction" ]]
+
+local UserInputService = game:GetService("UserInputService")
+
+eee.OnClientInvoke = function() -- fires when client get invoken by sevrer
+	return UserInputService.TouchEnabled -- sends data to server
+end
+
+--------------END------------------
+
+--------------Server script: parent better to be drop button
+
+local eee = game.ReplicatedStorage.REMOTES:WaitForChild(`IsPlayerMobileFunction`, 432423) --[[
+CAUTION: object must be "RemoteFunction" ]]
+
+local UserInputService = game:GetService("UserInputService")
+
+eee.OnClientInvoke = function() -- fires when client get invoken by sevrer
+	return UserInputService.TouchEnabled -- sends data to server
+end
+
+------------------END----------------
