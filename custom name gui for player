@@ -1,0 +1,45 @@
+---------------SCRIPT made by @Pasgamj0 (on roblox) -------------------
+---------------Server Script: game.ServerScriptService-------------
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+
+local nameGuiTemplate = ReplicatedStorage:FindFirstChild("NameGui") -- path to BillboardGui
+
+local Owner_Name = `Pasgamj0`
+
+local GroupService = game:GetService("GroupService")
+local Id_Group = 854761270 -- if you want to make "member" rank or other paste your group id / community id
+
+
+Players.PlayerAdded:Connect(function(player)
+	player.CharacterAdded:Connect(function(character)
+		local head = character:WaitForChild("Head")
+		local nameGuiClone = nameGuiTemplate:Clone()
+		nameGuiClone.Parent = head
+			if nameGuiClone then
+				character:FindFirstChild("Humanoid").DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None 
+				character:FindFirstChild("Humanoid").NameDisplayDistance = 0 -- disable default name by roblox
+				nameGuiClone.NameLabel.Text = player.DisplayName -- player display name
+			nameGuiClone.StatsLabel.Text = player:WaitForChild("leaderstats"):FindFirstChild("Touch").Value -- optional: i use it to show player's stat named Touch, you can remove
+			nameGuiClone.Rank.Visible = false -- first disable
+			if player.Name == Owner_Name then
+				nameGuiClone.Rank.Visible = true
+				nameGuiClone.Rank.Text = `Owner`
+			elseif player:IsInGroup(Id_Group) then -- if player in group (you can remove)
+				local role = player:GetRoleInGroup(Id_Group)
+				if role == `Member` then -- if player is in group and he is member
+					nameGuiClone.Rank.Visible = true
+					nameGuiClone.Rank.Text = `Member`
+					nameGuiClone.Rank.TextColor3 = Color3.fromRGB(0, 34, 255)
+				end 
+			end
+				player:FindFirstChild("leaderstats"):FindFirstChild("Touch"):GetPropertyChangedSignal("Value"):Connect(function() -- every time stat changes, you can remove
+				nameGuiClone.StatsLabel.Text = player:WaitForChild("leaderstats"):FindFirstChild("Touch").Value
+		end)
+		end
+		end)
+	end)
+
+---------------------END-----------------------
