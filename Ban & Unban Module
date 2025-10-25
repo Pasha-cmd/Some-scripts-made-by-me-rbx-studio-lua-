@@ -1,0 +1,42 @@
+-----------SCRIPT made by @Pasgamj0 (on roblox)
+-----------Module Script: game.ReplicatedStorage -------------------------
+
+local module = {}
+
+
+function module.BanPlayer(player:Player, Reason:string, Dur:number)
+	local config:BanConfigType = {
+		UserIds = {player.UserId},
+		Duration = Dur,
+		DisplayReason = Reason,
+		PrivateReason = `DR.:`.. Reason,
+		ExcludeAltAccounts = true
+	}
+		game.Players:BanAsync(config) -- ban player
+		
+	
+	function module.UnBanPlayer(player)
+		local config:UnbanConfigType = {
+			UserIds = {player.UserId} -- only one agument requires
+		}
+		game.Players:UnbanAsync(config) -- unban player
+	end
+end
+
+return module
+
+-----------------END------------------
+
+----------------example: Server Script------------------
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local BanPlayerModule = require(ReplicatedStorage.BanPlayerModule)
+
+
+
+game.Players.PlayerAdded:Connect(function(player)
+	wait(10)
+	BanPlayerModule.BanPlayer(player, `You are banned!`, 1 * 60 * 60) -- (1 hour)
+end)
+
+-----------------END---------------
